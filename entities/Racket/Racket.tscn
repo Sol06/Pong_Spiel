@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/Racket/Racket.png" type="Texture" id=1]
+[ext_resource path="res://entities/Racket/Racket.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7, 40 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node
+
+class_name PlayerInputComponent
+ 
+# Declare member variables here. Examples:
+var player 
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	player = get_parent()
+	player.connect(\"update\", self, \"handle_input\")
+	
+func handle_input():
+	if not \"direction\" in player:
+		return
+
+	player.direction = Vector2()
+	
+	if Input.is_action_pressed(\"ui_up\"):
+		player.direction.y -= 1
+	if Input.is_action_pressed(\"ui_down\"):
+		player.direction.y += 1	
+"
+
+[node name="Racket" type="KinematicBody2D" groups=["rackets"]]
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+script = SubResource( 2 )
